@@ -3,45 +3,42 @@
 
 using namespace std;
 
-class Curves
+class Curve
 {
 public:
-
-	virtual void Create(double&, double&, double&) = 0;
-	virtual void Point(double&) = 0;
-	virtual double GetRadii() = 0;
+	
+	virtual void Point(double&) const = 0;
+	virtual double GetRadii() const = 0;// 
 };
 
 
-class Circle : public Curves
+
+
+class Circle : public Curve
 {
 private:
-
+	
 	double Rx;
-
+	
 public:
-	static int count;
-	void Create(double &Rx, double &Ry, double &zStep) override
+		
+	Circle(double &Rx) : Rx(Rx) {}
+	
+	void Point(double& t) const override
 	{
-		this->Rx = Rx;
-		count++;
+		cout << "r(t = " << t << ") = (" << Rx * cos(t) << ", " << Rx * sin(t) <<  ")" << endl;
+		cout << "dr/dt (t = " << t << ") = (" << - Rx *sin(t) << ", " << Rx * cos(t)<< ")" << endl;
 	}
 
-	void Point(double& t) override
-	{
-		cout << "r(t = " << t << ") = (" << Rx * sin(t) << ", " << Rx * cos(t) << ", " << 0 << ")" << endl;
-		cout << "dr/dt (t = " << t << ") = (" << Rx * cos(t) << ", " << -Rx * sin(t) << ", " << 0 << ")" << endl;
-	}
-
-	double GetRadii()
+	double GetRadii() const
 	{
 		return Rx;
 	}
 };
 
-int Circle::count = 0;
 
-class Ellipse : public Curves
+
+class Ellipse : public Curve
 {
 private:
 
@@ -49,27 +46,23 @@ private:
 
 
 public:
-	static int count;
-	void Create(double &Rx, double &Ry, double &zStep) override
+	
+	Ellipse(double &Rx, double &Ry) : Rx(Rx), Ry(Ry) {}
+	
+	void Point(double& t) const override
 	{
-		this->Rx = Rx;
-		this->Ry = Ry;
-		count++;
+		cout << "r(t = " << t << ") = (" << Rx * cos(t) << ", " << Ry * sin(t) << ")" << endl;
+		cout << "dr/dt (t = " << t << ") = (" <<- Rx * sin(t) << ", " << Ry * cos(t)  << ")" << endl;
 	}
-	void Point(double& t) override
-	{
-		cout << "r(t = " << t << ") = (" << Rx * sin(t) << ", " << Ry * cos(t) << ", " << 0 << ")" << endl;
-		cout << "dr/dt (t = " << t << ") = (" << Rx * cos(t) << ", " << -Ry * sin(t) << ", " << 0 << ")" << endl;
-	}
-	double GetRadii()
+	double GetRadii() const//
 	{
 		return 0;
 	}
 };
 
-int Ellipse::count = 0;
 
-class  Helix : public Curves
+
+class  Helix : public Curve
 {
 private:
 
@@ -77,25 +70,21 @@ private:
 
 
 public:
-	static int count;
-	void Create(double &Rx, double &Ry, double &zStep) override
+	
+	Helix(double &Rx, double &Ry, double &zStep) :Rx(Rx), Ry(Ry), zStep(zStep) {}
+	
+	void Point(double& t) const override
 	{
-		this->Rx = Rx;
-		this->Ry = Ry;
-		this->zStep = zStep;
-		count++;
+		cout << "r(t = " << t << ") = (" << Rx * cos(t) << ", " << Ry * sin(t) << ", " << zStep * t << ")" << endl;
+		cout << "dr/dt (t = " << t << ") = (" <<-Rx * sin(t) << ", " << Ry * cos(t) << ", " << zStep << ")" << endl;
 	}
-	void Point(double& t) override
-	{
-		cout << "r(t = " << t << ") = (" << Rx * sin(t) << ", " << Ry * cos(t) << ", " << zStep * t << ")" << endl;
-		cout << "dr/dt (t = " << t << ") = (" << Rx * cos(t) << ", " << -Ry * sin(t) << ", " << zStep << ")" << endl;
-	}
-	double GetRadii()
+	
+	double GetRadii() const//
 	{
 		return 0;
 	}
 };
 
-int Helix::count = 0;
+
 
 #pragma once
